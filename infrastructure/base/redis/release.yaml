@@ -1,0 +1,31 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: redis
+  namespace: infras
+spec:
+  interval: 1h
+  timeout: 10m
+  chart:
+    spec:
+      chart: redis
+      version: 23.0.2
+      sourceRef:
+        kind: HelmRepository
+        name: bitnamicharts
+        namespace: infras
+  releaseName: redis
+  targetNamespace: infras
+  values:
+    architecture: standalone
+    auth:
+      enabled: false
+    master:
+      resourcesPreset: "none"
+      persistence:
+        enabled: false
+      resources:
+        requests: { cpu: 50m, memory: 128Mi }
+        limits: { cpu: 100m, memory: 256Mi }
+    metrics:
+      enabled: false
