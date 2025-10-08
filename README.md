@@ -16,6 +16,18 @@
     ./monitoring/base/prometheus-grafana/grafana-secret-sealed.yaml
 
 
+    kubectl create secret generic jenkins-secret \
+      --namespace integration \
+      --from-literal=username={FILL_VALUE_HERE} \
+      --from-literal=password={FILL_VALUE_HERE} \
+      --dry-run=client -o yaml | \
+    kubeseal \
+      --controller-name=sealed-secrets-controller \
+      --controller-namespace=kube-system \
+      --format yaml > \
+    ./integration/base/jenkins/jenkins-secret-sealed.yaml
+
+
 # Extra commands:
 
   Update test scripts

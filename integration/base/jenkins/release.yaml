@@ -1,0 +1,39 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jenkins
+  namespace: integration
+spec:
+  interval: 1h
+  timeout: 10m
+  releaseName: jenkins
+  targetNamespace: integration
+  chart:
+    spec:
+      chart: jenkins
+      version: 5.8.98
+      sourceRef:
+        kind: HelmRepository
+        name: jenkinsci
+        namespace: integration
+
+  values:
+    
+    persistence: { size: "3Gi" }
+
+    controller:
+      admin:
+        existingSecret: jenkins-secret
+      resources:
+        requests: { cpu: "50m", memory: "128Mi" }
+        limits: { cpu: "100m", memory: "256Mi" }
+      sidecars:
+        configAutoReload:
+          resources:
+            requests: { cpu: "20m", memory: "32Mi" }
+            limits: { cpu: "40m", memory: "64Mi" }
+    
+    agent:
+      resources:
+        requests: { cpu: "256m", memory: "256Mi" }
+        limits: { cpu: "512m", memory: "512Mi" }
