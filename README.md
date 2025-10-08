@@ -18,8 +18,8 @@
 
     kubectl create secret generic jenkins-secret \
       --namespace integration \
-      --from-literal=username={FILL_VALUE_HERE} \
-      --from-literal=password={FILL_VALUE_HERE} \
+      --from-literal=jenkins-admin-user={FILL_VALUE_HERE} \
+      --from-literal=jenkins-admin-password={FILL_VALUE_HERE} \
       --dry-run=client -o yaml | \
     kubeseal \
       --controller-name=sealed-secrets-controller \
