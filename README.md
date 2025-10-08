@@ -18,6 +18,17 @@
 
 # Extra commands:
 
+  Update test scripts
+
+    kubectl create configmap cart-update-soak-test-script \
+      --from-file=./apps/base/cart-service/job-scripts/cart-update-soak-test.js \
+      --dry-run=client \
+      --namespace=apps \
+      -o yaml | \
+    sed '/^metadata:/a \  labels:\n    app.kubernetes.io/name: cart-service' > \
+    ./apps/base/cart-service/job-scripts/cart-update-soak-test-script.yaml
+
+
   Saving a Grafana Dashboard:
 
     kubectl create configmap cart-service-dashboard \
