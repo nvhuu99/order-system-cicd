@@ -1,0 +1,73 @@
+apiVersion: v1
+data:
+  cart-update-load-test.js: "import http from \"k6/http\"\r\nimport { check, sleep
+    } from \"k6\"\r\nimport { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js'\r\n\r\nconst
+    cartServiceHosts = (__ENV.CART_SVC_INSTANCES ?? \"cart-service\").split(\",\")\r\nconst
+    totalUsers = __ENV.TOTAL_VUS ?? 10\r\nconst totalRequestPerUser = __ENV.TOTAL_REQUESTS_PER_VU
+    ?? 10\r\nconst maxDuration = __ENV.MAX_DURATION ?? '60s'\r\nconst hostname = __ENV.HOSTNAME
+    ?? \"cart-update-load-test\"\r\nconst cartVersions = {}\r\nconst actions = [\"QTY_CHANGE\",
+    \"DROP_ITEM\"]\r\nconst products = [\r\n  { id: \"P001\", name: \"Laptop\" },\r\n
+    \ { id: \"P002\", name: \"Smartphone\" },\r\n  { id: \"P003\", name: \"Headphones\"
+    },\r\n  { id: \"P004\", name: \"Keyboard\" },\r\n  { id: \"P005\", name: \"Mouse\"
+    },\r\n  { id: \"P006\", name: \"Monitor\" },\r\n  { id: \"P007\", name: \"USB-C
+    Cable\" },\r\n  { id: \"P008\", name: \"External HDD\" },\r\n  { id: \"P009\",
+    name: \"Printer\" },\r\n  { id: \"P010\", name: \"Tablet\" },\r\n]\r\n\r\nexport
+    const options = {\r\n  scenarios: {\r\n    send_cart_requests: {\r\n      executor:
+    \"per-vu-iterations\",\r\n      vus: totalUsers,\r\n      iterations: totalRequestPerUser,\r\n
+    \     maxDuration: maxDuration,\r\n    },\r\n  },\r\n};\r\n\r\nexport default
+    function () {\r\n\r\n  var userId = `VU_${__VU}_${hostname}`\r\n  var cartVer
+    = (cartVersions[userId] ?? 0) + 1;\r\n  var product = products[randomInt(0, products.length
+    - 1)]\r\n  var action = actions[randomInt(0, actions.length - 1)]\r\n  var qty
+    = action === \"QTY_CHANGE\" ? randomInt(1, 5) : 0\r\n  var body = JSON.stringify({\r\n
+    \   userId: userId,\r\n    versionNumber: cartVer,\r\n    entries: [\r\n      {\r\n
+    \       productId: product.id,\r\n        productName: product.name,\r\n        qtyAdjustment:
+    qty,\r\n        action: action,\r\n      },\r\n    ],\r\n  })\r\n\r\n  var url
+    = `http://${__ENV.SHOP_SVC_HOST}:${__ENV.SHOP_SVC_API_PORT}/api/v1/carts/${userId}`\r\n
+    \ var res = http.put(url, body, { headers: { \"Content-Type\": \"application/json\"
+    } })\r\n  var success = check(res, {\r\n    \"status is 200\": (r) => r.status
+    === 200,\r\n  })\r\n\r\n  if (success) {\r\n    cartVersions[userId] = cartVer\r\n
+    \ }\r\n}\r\n\r\nexport function handleSummary(data) {\r\n\r\n  var observedCartVersions
+    = {}\r\n  var totalRequestsHandledPerHost = {}\r\n  var failedCarts = {}\r\n\r\n
+    \ var waited = 0\r\n  var maxRetries = 30\r\n  var isSucceeded = false\r\n  var
+    successTotals = 0\r\n  \r\n  while (maxRetries--) {\r\n\r\n    for (var i = 0;
+    i < cartServiceHosts.length; ++i) {\r\n      var host = cartServiceHosts[i].trim()\r\n
+    \     var url = `http://${host}:${__ENV.CART_SVC_API_PORT}/api/v1/carts/cart-update-request-handler/summary`\r\n
+    \     var res = http.get(url, { headers: { \"Content-Type\": \"application/json\"
+    } })\r\n      var summary = res.json()\r\n\r\n      if (res.status != 200) {\r\n
+    \       continue\r\n      }\r\n\r\n      for (const userId in summary[\"observed_cart_versions\"])
+    {\r\n        if (userId.endsWith(hostname)) {\r\n          observedCartVersions[userId]
+    = Math.max(summary[\"observed_cart_versions\"][userId], (observedCartVersions[userId]
+    ?? 0)) \r\n        }\r\n      }\r\n\r\n      \r\n      totalRequestsHandledPerHost[host]
+    = 0\r\n      for (const userId in summary[\"requests_handled_total\"]) {\r\n        if
+    (userId.endsWith(hostname)) {\r\n          totalRequestsHandledPerHost[host] =
+    summary[\"requests_handled_total\"][userId] + totalRequestsHandledPerHost[host]\r\n
+    \       }\r\n      }\r\n    }\r\n\r\n    for (const userId in observedCartVersions)
+    {\r\n      if (observedCartVersions[userId] == totalRequestPerUser) {\r\n        successTotals++\r\n
+    \     } else {\r\n        failedCarts[userId] = observedCartVersions[userId]\r\n
+    \     }\r\n    }\r\n\r\n    if (successTotals == totalUsers) {\r\n      isSucceeded
+    = true\r\n      break\r\n    }\r\n\r\n    successTotals = 0\r\n\r\n    sleep(1)\r\n
+    \   waited += 1\r\n  }\r\n  \r\n  var customContent = \"\"\r\n  customContent
+    += \"█ Requests Summary:\\n\\n\"\r\n  customContent += `    Total success carts......:
+    \ ${ successTotals }\\n`\r\n  customContent += `    Total failed carts.......:
+    \ ${ totalUsers - successTotals }\\n`\r\n  customContent += `    Result...................:
+    \ ${ isSucceeded ? \"Success\" : \"Failed\" }\\n`\r\n  customContent += \"\\n█
+    Estimated duration:\\n\\n\"\r\n  customContent += `${\r\n      isSucceeded \r\n
+    \       ? \"    Workload handled completely after ~\" + Math.round(waited + (data.state.testRunDurationMs/1000))
+    + \" seconds\\n\"\r\n        : \"    Workload aborted after ~\" + Math.round(waited
+    + (data.state.testRunDurationMs/1000)) + \" seconds\\n\"\r\n  }`\r\n  customContent
+    += \"\\n█ Requests handled by host:\\n\\n\"\r\n  for (const host in totalRequestsHandledPerHost)
+    {\r\n    customContent += \"    \" + host.padEnd(30, \".\") + \":  \" + totalRequestsHandledPerHost[host]
+    + \"\\n\"\r\n  }\r\n  customContent += \"\\n█ Carts failed:\\n\\n\"\r\n  if (!
+    isSucceeded) {\r\n    for (const userId in failedCarts) {\r\n      customContent
+    += \"    \" + userId.padEnd(30, \".\") + \":  \" + failedCarts[userId] + \"\\n\"\r\n
+    \   }\r\n  } else {\r\n    customContent += \"    None\\n\"\r\n  }\r\n\r\n  return
+    {\r\n    stdout: textSummary(data) + \"\\n\\n\" + customContent + \"\\n\",\r\n
+    \ }\r\n}\r\n\r\nfunction randomInt(min, max) { return Math.floor(Math.random()
+    * (max - min + 1)) + min }\r\n\r\n"
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: cart-service
+  creationTimestamp: null
+  name: cart-update-load-test-script
+  namespace: apps

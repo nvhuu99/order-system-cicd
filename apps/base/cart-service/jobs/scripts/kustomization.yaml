@@ -1,0 +1,3 @@
+resources:
+  - "./cart-update-load-test-script.yaml"
+  - "./cart-update-soak-test-script.yaml"

@@ -1,0 +1,36 @@
+apiVersion: v1
+data:
+  cart-update-soak-test.js: "import http from \"k6/http\"\r\nimport { check } from
+    \"k6\"\r\n\r\nconst requestRate = __ENV.REQUESTS_PER_SECOND ?? 100\r\nconst errorRate
+    = __ENV.ERROR_RATE ?? 0.2\r\n\r\nexport const options = {\r\n  scenarios: {\r\n
+    \   cart_test: {\r\n      executor: \"constant-arrival-rate\",\r\n      rate:
+    requestRate,\r\n      timeUnit: \"1s\",\r\n      duration: __ENV.DURATION ?? \"10m\",\r\n
+    \     preAllocatedVUs: requestRate,\r\n      maxVUs: requestRate * 2,\r\n    },\r\n
+    \ },\r\n}\r\n\r\nconst timestamp = Date.now()\r\nconst cartVersions = {}\r\nconst
+    actions = [\"QTY_CHANGE\", \"DROP_ITEM\"]\r\nconst products = [\r\n  { id: \"P001\",
+    name: \"Laptop\" },\r\n  { id: \"P002\", name: \"Smartphone\" },\r\n  { id: \"P003\",
+    name: \"Headphones\" },\r\n  { id: \"P004\", name: \"Keyboard\" },\r\n  { id:
+    \"P005\", name: \"Mouse\" },\r\n  { id: \"P006\", name: \"Monitor\" },\r\n  {
+    id: \"P007\", name: \"USB-C Cable\" },\r\n  { id: \"P008\", name: \"External HDD\"
+    },\r\n  { id: \"P009\", name: \"Printer\" },\r\n  { id: \"P010\", name: \"Tablet\"
+    },\r\n]\r\n\r\nexport default function () {\r\n\r\n  var userId = `VU_${__VU}_${timestamp}`\r\n
+    \ var cartVer = (cartVersions[userId] ?? 0) + 1;\r\n  if (Math.random() < errorRate)
+    {\r\n      cartVer = -1; // simulate error\r\n  }\r\n  var product = products[randomInt(0,
+    products.length - 1)]\r\n  var action = actions[randomInt(0, actions.length -
+    1)]\r\n  var qty = action === \"QTY_CHANGE\" ? randomInt(1, 5) : 0\r\n  var body
+    = JSON.stringify({\r\n    userId: userId,\r\n    versionNumber: cartVer,\r\n    entries:
+    [\r\n      {\r\n        productId: product.id,\r\n        productName: product.name,\r\n
+    \       qtyAdjustment: qty,\r\n        action: action,\r\n      },\r\n    ],\r\n
+    \ })\r\n\r\n  var url = `http://${__ENV.CART_SVC_HOST}:${__ENV.CART_SVC_API_PORT}/api/v1/carts/${userId}`\r\n
+    \ var res = http.put(url, body, { headers: { \"Content-Type\": \"application/json\"
+    } })\r\n  var success = check(res, {\r\n    \"status is 200\": (r) => r.status
+    === 200,\r\n  })\r\n\r\n  if (success) {\r\n    cartVersions[userId] = cartVer\r\n
+    \ }\r\n}\r\n\r\nfunction randomInt(min, max) { return Math.floor(Math.random()
+    * (max - min + 1)) + min }"
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: cart-service
+  creationTimestamp: null
+  name: cart-update-soak-test-script
+  namespace: apps
