@@ -3,3 +3,4 @@ resources:
   - "./repos.yaml"
   - "./loki"
   - "./tempo"
+  - "./prometheus-grafana"

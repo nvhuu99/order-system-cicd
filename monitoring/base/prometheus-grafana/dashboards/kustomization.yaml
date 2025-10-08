@@ -1,0 +1,2 @@
+resources:
+  - "./cart-service.yaml"
