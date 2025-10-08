@@ -1,5 +1,20 @@
 # order-system-deploy
 
+    helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
+    helm install sealed-secrets -n kube-system --set-string fullnameOverride=sealed-secrets-controller sealed-secrets/sealed-secrets
+    go install github.com/bitnami-labs/sealed-secrets/cmd/kubeseal@main
+
+    kubectl create secret generic grafana-secret \
+      --namespace monitoring \
+      --from-literal=admin-user={FILL_VALUE_HERE} \
+      --from-literal=admin-password={FILL_VALUE_HERE} \
+      --dry-run=client -o yaml | \
+    kubeseal \
+      --controller-name=sealed-secrets-controller \
+      --controller-namespace=kube-system \
+      --format yaml > \
+    ./monitoring/base/prometheus-grafana/grafana-secret-sealed.yaml
+
 
 # Extra commands:
 
