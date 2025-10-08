@@ -3,3 +3,4 @@ resources:
   - "./configmap.yaml"
   - "./inventory-service"
   - "./cart-service"
+  - "./shop-service"
