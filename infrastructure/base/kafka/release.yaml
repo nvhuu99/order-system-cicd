@@ -1,0 +1,42 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kafka
+  namespace: infras
+spec:
+  interval: 1h
+  timeout: 10m
+  releaseName: kafka
+  targetNamespace: infras
+  chart:
+    spec:
+      chart: kafka
+      version: 32.4.3
+      sourceRef:
+        kind: HelmRepository
+        name: bitnamicharts
+        namespace: infras
+
+  values:
+    global:
+      security:
+        allowInsecureImages: true
+    image:
+      registry: docker.io
+      repository: bitnamilegacy/kafka
+      tag: 4.0.0-debian-12-r10
+
+    listeners:
+      client:
+        protocol: PLAINTEXT
+      controller:
+        protocol: PLAINTEXT
+      interbroker:
+        protocol: PLAINTEXT
+
+    controller:
+      replicaCount: 3
+      persistence: { size: 5Gi }
+      resources:
+        requests: { cpu: 50m, memory: 256Mi }
+        limits: { cpu: 100m, memory: 640Mi }
