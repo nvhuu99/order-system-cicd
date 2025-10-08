@@ -19,7 +19,7 @@ spec:
 
   values:
     
-    persistence: { size: "3Gi" }
+    persistence: { size: "5Gi" }
 
     controller:
       admin:
@@ -27,13 +27,13 @@ spec:
       resources:
         requests: { cpu: "50m", memory: "128Mi" }
         limits: { cpu: "100m", memory: "256Mi" }
-      sidecars:
-        configAutoReload:
-          resources:
-            requests: { cpu: "20m", memory: "32Mi" }
-            limits: { cpu: "40m", memory: "64Mi" }
+      # sidecars:
+      #   configAutoReload:
+      #     resources:
+      #       requests: { cpu: "20m", memory: "32Mi" }
+      #       limits: { cpu: "40m", memory: "64Mi" }
     
-    agent:
-      resources:
-        requests: { cpu: "256m", memory: "256Mi" }
-        limits: { cpu: "512m", memory: "512Mi" }
+    # agent:
+    #   resources:
+    #     requests: { cpu: "256m", memory: "256Mi" }
+    #     limits: { cpu: "512m", memory: "512Mi" }
