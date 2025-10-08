@@ -1,0 +1,2 @@
+resources:
+  - "./inventory-service.yaml"
