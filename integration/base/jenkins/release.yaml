@@ -42,8 +42,8 @@ spec:
       sidecars:
         configAutoReload:
           resources:
-            requests: { cpu: "20m", memory: "32Mi" }
-            limits: { cpu: "40m", memory: "64Mi" }
+            requests: { cpu: "20m", memory: "128Mi" }
+            limits: { cpu: "40m", memory: "256Mi" }
     
     agent:
       resources:
