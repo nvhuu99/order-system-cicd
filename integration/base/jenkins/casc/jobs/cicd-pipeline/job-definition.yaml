@@ -1,0 +1,145 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jenkins-casc-pipeline-job-cicd-pipeline
+  namespace: integration
+  labels:
+    jenkins-jenkins-config: "true"
+data:
+  cicd-pipeline.yaml: |-
+    jobs:
+    - script: >
+        pipelineJob('cicd-pipeline') {
+          logRotator {
+            numToKeep(5)
+          }
+          definition {
+            cps {
+              script("""
+              def pod = '''
+              ---
+              apiVersion: v1
+              kind: Pod
+              spec:
+
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: kubernetes.io/hostname
+                          operator: In
+                          values:
+                          - kind-worker
+
+                volumes:
+                - name: build-cache
+                  persistentVolumeClaim:
+                    claimName: build-cache
+                - name: maven-cache
+                  persistentVolumeClaim:
+                    claimName: maven-cache
+                - name: dind-cache
+                  persistentVolumeClaim:
+                    claimName: dind-cache
+
+                containers:
+                - name: "jnlp"
+                  volumeMounts:
+                    - name: build-cache
+                      mountPath: /root/src
+                    - mountPath: "/home/jenkins/agent"
+                      name: "workspace-volume"
+                  securityContext:
+                    runAsUser: 0
+
+                - name: dind
+                  image: docker:dind
+                  env:
+                    - name: DOCKER_TLS_CERTDIR
+                      value: ""
+                  command: ["dockerd-entrypoint.sh"]
+                  args: ["--host=tcp://0.0.0.0:2375"]
+                  volumeMounts:
+                    - name: build-cache
+                      mountPath: /root/src
+                    - name: dind-cache
+                      mountPath: /var/lib/docker
+                  securityContext:
+                    privileged: true
+                    runAsUser: 0
+
+                - name: jdk
+                  image: "openjdk:21-jdk-slim"
+                  resources:
+                    requests: { cpu: "2000m", memory: "512Mi" }
+                    limits: { cpu: "2000m", memory: "1024Mi" }
+                  tty: true
+                  command: ["sleep"]
+                  args: ["infinity"]
+                  env:
+                    - name: DOCKER_HOST
+                      value: "tcp://localhost:2375"
+                  volumeMounts:
+                    - name: build-cache
+                      mountPath: /root/src
+                    - name: maven-cache
+                      mountPath: /root/.m2/repository
+                  securityContext:
+                    runAsUser: 0
+              '''
+
+              pipeline {
+
+                agent {
+                  kubernetes {
+                    yaml pod
+                  }
+                }
+                
+                stages {
+
+                  stage('Checkout') {
+                    steps {
+                      dir('/root/src') {
+                        git branch: 'main', url: 'https://github.com/nvhuu99/order-system.git'
+                      }
+                      script {
+                        sh 'chmod -R 775 /root/src/services/cart'
+                      }
+                    }
+                  }
+
+                  stage('Test & Build App') {
+                    steps {
+                      container('jdk') {
+                        dir('/root/src/services/cart') {
+                          sh './mvnw package -DwithAllContainers=yes'
+                        }
+                      }
+                    }
+                  }
+
+                  stage('Build & Push image') {
+                    steps {
+                      container('dind') {
+                        dir('/root/src/services/cart') {
+                          withCredentials([usernamePassword(credentialsId: 'docker_hub', usernameVariable: 'DOCKER_USR', passwordVariable: 'DOCKER_PWD')]) {
+                            script {
+                              sh 'echo "$DOCKER_PWD" | docker login -u "$DOCKER_USR" --password-stdin'
+                              sh 'docker build -t nvhuu991/order-system:cart-service .'
+                              sh 'docker push nvhuu991/order-system:cart-service'
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                }
+              }  
+              """.stripIndent())
+              sandbox()
+            }
+          }
+        }

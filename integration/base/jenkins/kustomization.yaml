@@ -1,3 +1,10 @@
 resources:
   - "./sealed-secrets.yaml"
+
+  # Jenkins Configuration As Code
+  - "./casc/credentials.yaml"
+  - "./casc/jobs/cicd-pipeline/pvc.yaml"
+  - "./casc/jobs/cicd-pipeline/job-definition.yaml"
+  
+  # Jenkins Helm Chart
   - "./release.yaml"

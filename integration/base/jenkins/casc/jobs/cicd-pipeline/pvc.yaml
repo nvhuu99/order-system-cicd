@@ -1,0 +1,129 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: maven-cache
+  namespace: integration
+  labels:
+    cache-for: maven
+spec:
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  local:
+    path: /mnt/data/maven-cache
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - kind-worker
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: maven-cache
+  namespace: integration
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 3Gi
+  selector:
+    matchLabels:
+      cache-for: maven
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: dind-cache
+  namespace: integration
+  labels:
+    cache-for: dind
+spec:
+  capacity:
+    storage: 8Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  local:
+    path: /mnt/data/dind-cache
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - kind-worker
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dind-cache
+  namespace: integration
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 8Gi
+  selector:
+    matchLabels:
+      cache-for: dind
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: build-cache
+  namespace: integration
+  labels:
+    cache-for: build
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  local:
+    path: /mnt/data/build-cache
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - kind-worker
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: build-cache
+  namespace: integration
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      cache-for: build

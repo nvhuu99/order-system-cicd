@@ -25,6 +25,9 @@ spec:
 
       admin:
         existingSecret: jenkins-secrets
+
+      additionalPlugins:
+        - job-dsl:1.93
       
       containerEnv:
       - name: DOCKER_HUB_USERNAME
@@ -52,10 +55,3 @@ spec:
           resources:
             requests: { cpu: "20m", memory: "128Mi" }
             limits: { cpu: "40m", memory: "256Mi" }
-
-    agent:
-      volumes:
-      - type: PVC
-        claimName: build-cache
-        mountPath: /root/src
-        readOnly: false
