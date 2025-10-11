@@ -1,3 +1,3 @@
 resources:
-  - "./jenkins-secret-sealed.yaml"
+  - "./sealed-secrets.yaml"
   - "./release.yaml"

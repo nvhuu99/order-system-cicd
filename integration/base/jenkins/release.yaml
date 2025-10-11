@@ -24,7 +24,15 @@ spec:
     controller:
 
       admin:
-        existingSecret: jenkins-secret
+        existingSecret: jenkins-secrets
+      
+      containerEnv:
+      - name: DOCKER_HUB_USERNAME
+        valueFrom:
+          secretKeyRef: { name: jenkins-secrets, key: docker-hub-user }
+      - name: DOCKER_HUB_PASSWORD
+        valueFrom:
+          secretKeyRef: { name: jenkins-secrets, key: docker-hub-password }
 
       javaOpts: "-Xms512m -Xmx896m"
       initContainerResources:
