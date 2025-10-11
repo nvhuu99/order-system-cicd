@@ -5,7 +5,7 @@
 #   namespace: flux-system
 # spec:
 #   interval: 10m0s
-#   path: ./monitoring/staging
+#   path: ./monitoring/development
 #   prune: true
 #   sourceRef:
 #     kind: GitRepository

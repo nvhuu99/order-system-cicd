@@ -1,5 +1,14 @@
 # order-system-deploy
 
+    flux bootstrap github \
+      --token-auth \
+      --owner=nvhuu99 \
+      --repository=order-system-deploy \
+      --branch=main \
+      --path=clusters/development \
+      --personal \
+      --private=false
+
     helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
     helm install sealed-secrets -n kube-system --set-string fullnameOverride=sealed-secrets-controller sealed-secrets/sealed-secrets
     go install github.com/bitnami-labs/sealed-secrets/cmd/kubeseal@main
