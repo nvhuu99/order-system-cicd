@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dind
+spec:
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - kind-worker
+
+  volumes:
+  - name: maven-cache
+    persistentVolumeClaim:
+      claimName: maven-cache
+  - name: dind-cache
+    persistentVolumeClaim:
+      claimName: dind-cache
+
+  containers:
+  - name: dind
+    image: docker:dind
+    resources:
+      requests: { cpu: "50m", memory: "128Mi" }
+      limits: { cpu: "100m", memory: "256Mi" }
+    env:
+      - name: DOCKER_TLS_CERTDIR
+        value: ""
+    command: ["dockerd-entrypoint.sh"]
+    args: ["--host=tcp://0.0.0.0:2375"]
+    volumeMounts:
+      - name: dind-cache
+        mountPath: /var/lib/docker
+    securityContext:
+      privileged: true
+      runAsUser: 0
