@@ -1,0 +1,5 @@
+resources:
+  - "../base"
+
+patches:
+  - path: cart-service/cart-service-patch.yaml
