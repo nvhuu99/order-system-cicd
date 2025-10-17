@@ -58,7 +58,7 @@ spec:
     spec:
       containers:
       - name: cart-service
-        image: order-processing-system/cart-service:latest
+        image: nvhuu991/order-system:cart-service
         imagePullPolicy: Never
         resources:
           requests:

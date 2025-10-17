@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
       - name: inventory-service
-        image: order-processing-system/inventory-service:latest
+        image: nvhuu991/order-system:inventory-service
         imagePullPolicy: Never
         resources:
           requests:

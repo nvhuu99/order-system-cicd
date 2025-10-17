@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: shop-service
-        image: order-processing-system/shop-service:latest
+        image: nvhuu991/order-system:shop-service
         imagePullPolicy: Never
         resources:
           requests:
