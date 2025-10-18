@@ -3,3 +3,4 @@ resources:
 
 patchesStrategicMerge:
   - "./kafka/release-patch.yaml"
+  - "./redis/release-patch.yaml"
