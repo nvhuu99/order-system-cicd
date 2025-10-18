@@ -3,3 +3,5 @@ resources:
 
 patchesStrategicMerge:
   - ./cart-service/cart-service-patch.yaml
+  - ./shop-service/shop-service-patch.yaml
+  - ./inventory-service/inventory-service-patch.yaml
