@@ -1,0 +1,54 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: linkerd-control-plane
+  namespace: linkerd
+spec:
+  interval: 1h
+  timeout: 10m
+  releaseName: linkerd-control-plane
+  targetNamespace: linkerd
+  chart:
+    spec:
+      chart: linkerd-control-plane
+      version: 2025.10.4
+      sourceRef:
+        kind: HelmRepository
+        name: linkerd-edge
+        namespace: linkerd
+
+  valuesFrom:
+    - kind: Secret
+      name: linkerd-identity-ca-crt
+      valuesKey: linkerd-identity-ca.crt
+      targetPath: identityTrustAnchorsPEM
+
+    - kind: Secret
+      name: linkerd-identity-issuer-crt
+      valuesKey: linkerd-identity-issuer.crt
+      targetPath: identity.issuer.tls.crtPEM
+    
+    - kind: Secret
+      name: linkerd-identity-issuer-key
+      valuesKey: linkerd-identity-issuer.key
+      targetPath: identity.issuer.tls.keyPEM
+
+  values:
+    proxy:
+      resources:
+        cpu: { request: 100m, limit: 100m }
+        memory: { request: 64Mi, limit: 64Mi }
+
+    controller:
+      tracing:
+        enabled: false
+    controllerReplicas: 1
+    controllerResources: &controller_resources
+      cpu: { request: 100m, limit: 100m }
+      memory: { request: 64Mi, limit: 64Mi }
+    
+    destinationResources: *controller_resources
+    identityResources: *controller_resources
+    heartbeatResources: *controller_resources
+    proxyInjectorResources: *controller_resources
+    spValidatorResources: *controller_resources
