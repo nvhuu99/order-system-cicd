@@ -5,7 +5,7 @@
       --owner=nvhuu99 \
       --repository=order-system-deploy \
       --branch=main \
-      --path=clusters/development \
+      --path=clusters/dev \
       --personal \
       --private=false
 
