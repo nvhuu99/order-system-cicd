@@ -20,6 +20,7 @@ spec:
   values:
     ingester:
       replicas: 1
+      persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
         requests: { cpu: 25m, memory: 128Mi }
         limits: { cpu: 50m, memory: 256Mi }
@@ -32,6 +33,7 @@ spec:
 
     querier:
       replicas: 1
+      persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
         requests: { cpu: 25m, memory: 64Mi }
         limits: { cpu: 50m, memory: 128Mi }
@@ -50,6 +52,7 @@ spec:
 
     compactor:
       replicas: 1
+      persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
         requests: { cpu: 25m, memory: 32Mi }
         limits: { cpu: 50m, memory: 64Mi }
