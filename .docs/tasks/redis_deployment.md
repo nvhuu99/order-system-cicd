@@ -38,6 +38,11 @@ If you have 5 Sentinel processes, and the quorum for a given master set to the v
     sentinel down-after-milliseconds mymaster 5000
     sentinel failover-timeout mymaster 60000
     sentinel parallel-syncs mymaster 1
+
+### Failover process:
+
+1. Sentinal vote for new master internally
+2. Redis Client use SENTINAL command to periodically fetch metadata and update new master address.
   
 ### Test fail over:
 
@@ -69,4 +74,6 @@ Kill the current master, the new master should be elected within a few seconds:
 ### Storage:
 
 Basically, Redis components need PVCs for WAL. Since it primarily store data all loaded to the memory, PVCs shoud not be more too distinct from the memory.
+
+The storage are seperated and used independently for each node. They do not share the same storage.
 

@@ -18,9 +18,6 @@ spec:
         namespace: infras
 
   values:
-    global:
-      security:
-        allowInsecureImages: true
     image:
       registry: docker.io
       repository: bitnamilegacy/kafka
@@ -35,8 +32,10 @@ spec:
         protocol: PLAINTEXT
 
     controller:
+      # deploy as single process (broker + controller)
+      controllerOnly: false
       replicaCount: 3
-      persistence: { size: 5Gi }
+      persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
         requests: { cpu: 50m, memory: 256Mi }
         limits: { cpu: 100m, memory: 640Mi }

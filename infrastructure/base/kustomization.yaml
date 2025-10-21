@@ -2,4 +2,4 @@ resources:
   - "./namespaces.yaml"
   - "./repos.yaml"
   - "./redis"
-  # - "./kafka"
+  - "./kafka"
