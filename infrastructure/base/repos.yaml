@@ -7,14 +7,3 @@ spec:
   interval: 24h
   type: oci
   url: oci://registry-1.docker.io/bitnamicharts
-
----
-
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: linkerd-edge
-  namespace: linkerd
-spec:
-  interval: 24h
-  url: https://helm.linkerd.io/edge
