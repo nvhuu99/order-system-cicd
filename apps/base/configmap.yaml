@@ -14,6 +14,7 @@ data:
   # Redis
   REDIS_HOST: "redis.infras.svc.cluster.local"
   REDIS_PORT: "6379"
+  REDIS_SENTINEL_PORT: "26379"
 
   # Kafka
   KAFKA_HOST: "kafka.infras.svc.cluster.local"
