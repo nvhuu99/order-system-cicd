@@ -22,13 +22,11 @@ spec:
     persistence: { size: "5Gi" }
 
     controller:
-
+      additionalPlugins:
+        - job-dsl:1.93
       admin:
         existingSecret: jenkins-secrets
 
-      additionalPlugins:
-        - job-dsl:1.93
-      
       containerEnv:
       - name: DOCKER_HUB_USERNAME
         valueFrom:
@@ -47,8 +45,8 @@ spec:
           memory: "1024Mi"
 
       resources:
-        requests: { cpu: "256m", memory: "512Mi" }
-        limits: { cpu: "512m", memory: "1024Mi" }
+        requests: { cpu: "100m", memory: "512Mi" }
+        limits: { cpu: "200m", memory: "1024Mi" }
 
       sidecars:
         configAutoReload:

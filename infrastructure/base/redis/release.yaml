@@ -18,6 +18,10 @@ spec:
         namespace: infras
   
   values:
+    
+    image:
+      repository: bitnamilegacy/redis
+      tag: 8.2.1-debian-12-r0
 
     architecture: replication
     auth:
@@ -30,7 +34,7 @@ spec:
     #
     replica:
       # minimum in replication mode (one master with two replicas) 
-      replicaCount: 2
+      replicaCount: 3
       # redis data volume
       persistence: { enabled: true, size: 512Mi, storageClass: standard }
       # redis container resources
@@ -39,6 +43,9 @@ spec:
         limits: { cpu: 100m, memory: 256Mi }
     sentinel:
       enabled: true
+      image:
+        repository: bitnamilegacy/redis-sentinel
+        tag: 8.2.1-debian-12-r0
       quorum: 2
       parallelSyncs: 1
       # when `automateClusterRecovery=true`, `downAfterMilliseconds` must not be greater than 2000ms
