@@ -12,12 +12,13 @@ data:
   LOKI_PUSH_API_ENDPOINT: "http://loki-loki-distributed-gateway.monitoring.svc.cluster.local/loki/api/v1/push"
 
   # Redis
-  REDIS_HOST: "redis-master.infras.svc.cluster.local"
+  REDIS_HOST: "redis.infras.svc.cluster.local"
   REDIS_PORT: "6379"
 
   # Kafka
   KAFKA_HOST: "kafka.infras.svc.cluster.local"
   KAFKA_PORT: "9092"
+  KAFKA_REPLICAS_COUNT: 3
 
   # Inventory Service
   INVENTORY_SVC_HOST: "inventory-service"
@@ -32,6 +33,6 @@ data:
   CART_SVC_API_PORT: "8081"
   CART_SVC_GRPC_PORT: "9091"
   CART_SVC_INSTANCES: |- 
-    cart-service-0.cart-service-headless.app.svc.cluster.local,
-    cart-service-1.cart-service-headless.app.svc.cluster.local,
-    cart-service-2.cart-service-headless.app.svc.cluster.local
+    cart-service-0.cart-service-headless.apps.svc.cluster.local,
+    cart-service-1.cart-service-headless.apps.svc.cluster.local,
+    cart-service-2.cart-service-headless.apps.svc.cluster.local
