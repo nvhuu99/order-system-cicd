@@ -18,7 +18,7 @@ data:
   # Kafka
   KAFKA_HOST: "kafka.infras.svc.cluster.local"
   KAFKA_PORT: "9092"
-  KAFKA_REPLICAS_COUNT: 3
+  KAFKA_REPLICAS_COUNT: "3"
 
   # Inventory Service
   INVENTORY_SVC_HOST: "inventory-service"
