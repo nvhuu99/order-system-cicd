@@ -1,5 +1,5 @@
 resources:
   - "./namespaces.yaml"
   - "./repos.yaml"
-  # - "./redis"
+  - "./redis"
   # - "./kafka"

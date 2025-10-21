@@ -6,6 +6,8 @@ metadata:
 spec:
   interval: 1h
   timeout: 10m
+  releaseName: redis
+  targetNamespace: infras
   chart:
     spec:
       chart: redis
@@ -14,18 +16,36 @@ spec:
         kind: HelmRepository
         name: bitnamicharts
         namespace: infras
-  releaseName: redis
-  targetNamespace: infras
+  
   values:
-    architecture: standalone
+
+    architecture: replication
     auth:
       enabled: false
-    master:
-      resourcesPreset: "none"
-      persistence:
-        enabled: false
+    metrics:
+      enabled: false
+    #
+    ## Ignored by the chart when enabled `sentinal`
+    # master: {}
+    #
+    replica:
+      # minimum is three in replication mode (one master with two replicas) 
+      replicaCount: 3
+      # redis data volume
+      persistence: { enabled: true, size: 512Mi, storageClass: standard }
+      # redis container resources
       resources:
         requests: { cpu: 50m, memory: 128Mi }
         limits: { cpu: 100m, memory: 256Mi }
-    metrics:
-      enabled: false
+    sentinel:
+      enabled: true
+      quorum: 2
+      parallelSyncs: 1
+      # when `automateClusterRecovery=true`, `downAfterMilliseconds` must not be greater than 2000ms
+      automateClusterRecovery: true
+      downAfterMilliseconds: 2000
+      persistence: { enabled: false }
+      # sentinal container resources
+      resources:
+        requests: { cpu: 50m, memory: 64Mi }
+        limits: { cpu: 100m, memory: 64Mi }
