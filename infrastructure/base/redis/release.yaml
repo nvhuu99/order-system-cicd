@@ -29,8 +29,8 @@ spec:
     # master: {}
     #
     replica:
-      # minimum is three in replication mode (one master with two replicas) 
-      replicaCount: 3
+      # minimum in replication mode (one master with two replicas) 
+      replicaCount: 2
       # redis data volume
       persistence: { enabled: true, size: 512Mi, storageClass: standard }
       # redis container resources
