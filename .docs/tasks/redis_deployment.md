@@ -41,13 +41,28 @@ If you have 5 Sentinel processes, and the quorum for a given master set to the v
   
 ### Test fail over:
 
-Make the master unavailable for 30s:
+Setup redis-client that print the current master every 1 second:
 
-    redis-cli -p 6379 DEBUG sleep 30
+    kubectl run redis-client --restart='Never' --image redis --command -- sleep infinity
+    
+    kubectl exec --tty -i redis-client -- bash
 
-Observe the vote and fail over process:
+    vim client-increment.sh
+    
+    #!/bin/bash
+    export REDISCLI_AUTH=password
+    while true
+    do
+        CURRENT_PRIMARY=$(redis-cli -h redis-sentinel -p 26379 SENTINEL get-master-addr-by-name mymaster)
+        CURRENT_PRIMARY_HOST=$(echo $CURRENT_PRIMARY | cut -d' ' -f1 | head -n 1)
+        echo "Current master's host: $CURRENT_PRIMARY_HOST"
+        redis-cli -h ${CURRENT_PRIMARY_HOST} -p 6379 INCR mycounter
+        sleep 1
+    done
 
-    kubectl logs <pod> -c <sentinal> -f -n infras
+Kill the current master, the new master should be elected within a few seconds:
+
+    kubectl delete pods <master_pod_name:redis-node-0>
 
 ---
 
