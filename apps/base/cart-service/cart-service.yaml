@@ -58,7 +58,8 @@ spec:
     spec:
       containers:
       - name: cart-service
-        image: nvhuu991/order-system:cart-service-v3.0.1
+        image: nvhuu991/order-system:cart-service
+        imagePullPolicy: Always
         resources:
           requests:
             cpu: 1

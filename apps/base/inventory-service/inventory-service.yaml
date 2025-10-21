@@ -36,6 +36,7 @@ spec:
       containers:
       - name: inventory-service
         image: nvhuu991/order-system:inventory-service
+        imagePullPolicy: Always
         resources:
           requests:
             cpu: 200m

@@ -36,6 +36,7 @@ spec:
       containers:
       - name: shop-service
         image: nvhuu991/order-system:shop-service
+        imagePullPolicy: Always
         resources:
           requests:
             cpu: 500m
