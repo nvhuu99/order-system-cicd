@@ -17,6 +17,11 @@
 1. The querier passes the query to all ingesters for *in-memory* data.
 2. The querier lazily loads data *from the backing store* and runs the query against it if ingesters returned no or insufficient data.
 
+### Replication:
+
+- Loki use Memberlist (created by HashiCorp) to keep track of nodes.
+- Loki replicates data by having distributors send each log stream to multiple ingesters, based on a configurable replication factor. The ingesters process the data, and if a write to storage is successful on a quorum of instances.
+
 ### Configuration:
 
 - **Ingester:** need PVC for WAL.
