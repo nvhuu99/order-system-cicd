@@ -20,7 +20,7 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - kind-worker
+                - dev-worker
 
 ---
 
@@ -64,7 +64,7 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - kind-worker
+                - dev-worker
 
 ---
 
@@ -108,7 +108,7 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - kind-worker
+                - dev-worker
 
 ---
 

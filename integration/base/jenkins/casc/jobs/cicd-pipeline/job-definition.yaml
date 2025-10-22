@@ -30,7 +30,7 @@ data:
                         - key: kubernetes.io/hostname
                           operator: In
                           values:
-                          - kind-worker
+                          - dev-worker
 
                 volumes:
                 - name: build-cache

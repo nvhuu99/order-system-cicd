@@ -35,7 +35,7 @@
                     - key: kubernetes.io/hostname
                     operator: In
                     values:
-                        - kind-worker
+                        - dev-worker
 
         ---
 
@@ -71,7 +71,7 @@
                 - key: kubernetes.io/hostname
                     operator: In
                     values:
-                    - kind-worker
+                    - dev-worker
 
         volumes:
         - name: maven-cache
