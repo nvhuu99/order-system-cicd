@@ -27,32 +27,34 @@ spec:
     traces:
       otlp:
         http: { enabled: true }
-        grpc: { enabled: false }
+        grpc: { enabled: true }
 
     querier:
-      replicas: 0
+      replicas: 1
       resources:
-        requests: { cpu: 25m, memory: 32Mi }
-        limits: { cpu: 50m, memory: 64Mi }
-
+        requests: { cpu: 50m, memory: 128Mi }
+        limits: { cpu: 50m, memory: 128Mi }
+    
     queryFrontend:
-      replicas: 0
+      replicas: 1
       resources:
-        requests: { cpu: 25m, memory: 32Mi }
-        limits: { cpu: 50m, memory: 64Mi }
+        requests: { cpu: 25m, memory: 64Mi }
+        limits: { cpu: 25m, memory: 64Mi }
 
     distributor:
       replicas: 1
+      persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
-        requests: { cpu: 25m, memory: 256Mi }
+        requests: { cpu: 50m, memory: 640Mi }
         limits: { cpu: 50m, memory: 640Mi }
       config:
         max_attribute_bytes: 2048
 
     ingester:
       replicas: 1
+      persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
-        requests: { cpu: 25m, memory: 256Mi }
+        requests: { cpu: 50m, memory: 640Mi }
         limits: { cpu: 50m, memory: 640Mi }
       config:
         trace_idle_period: 10s
@@ -65,7 +67,7 @@ spec:
       enabled: true
       replica: 1
       resources:
-        requests: { cpu: 25m, memory: 256Mi }
+        requests: { cpu: 50m, memory: 512Mi }
         limits: { cpu: 50m, memory: 512Mi }
       config:
         processor:
@@ -84,10 +86,14 @@ spec:
               url: http://prom-stack-kube-prometheus-prometheus:9090/api/v1/write
 
     compactor:
-      replicas: 0
+      replicas: 1
+      persistence: { enabled: true, size: 3Gi, storageClass: standard }
+      resources:
+        requests: { cpu: 25m, memory: 64Mi }
+        limits: { cpu: 25m, memory: 64Mi }
 
     memcached:
       replicas: 1
       resources:
-        requests: { cpu: 25m, memory: 16Mi }
-        limits: { cpu: 50m, memory: 32Mi }
+        requests: { cpu: 25m, memory: 32Mi }
+        limits: { cpu: 25m, memory: 32Mi }
