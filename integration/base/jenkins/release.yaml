@@ -19,7 +19,7 @@ spec:
 
   values:
     
-    persistence: { size: "5Gi" }
+    persistence: { enabled: true, size: "5Gi", storageClass: standard }
 
     controller:
       additionalPlugins:
@@ -37,19 +37,15 @@ spec:
 
       javaOpts: "-Xms512m -Xmx896m"
       initContainerResources:
-        requests:
-          cpu: "100m"
-          memory: "512Mi"
-        limits:
-          cpu: "200m"
-          memory: "1024Mi"
+        requests: { cpu: "200m", memory: "1024Mi" }
+        limits: { cpu: "200m", memory: "1024Mi" }
 
       resources:
-        requests: { cpu: "100m", memory: "512Mi" }
+        requests: { cpu: "200m", memory: "1024Mi" }
         limits: { cpu: "200m", memory: "1024Mi" }
 
       sidecars:
         configAutoReload:
           resources:
-            requests: { cpu: "20m", memory: "128Mi" }
-            limits: { cpu: "40m", memory: "256Mi" }
+            requests: { cpu: "25m", memory: "256Mi" }
+            limits: { cpu: "25m", memory: "256Mi" }
