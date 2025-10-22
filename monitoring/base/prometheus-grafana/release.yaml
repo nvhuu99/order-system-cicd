@@ -22,10 +22,10 @@ spec:
       enabled: false
 
     grafana:
-      persistence: { enabled: true, type: pvc, size: 3Gi }
+      persistence: { enabled: true, size: 3Gi, storageClass: standard }
       initChownData: { enabled: false }
       resources:
-        requests: { cpu: 25m, memory: 256Mi }
+        requests: { cpu: 50m, memory: 512Mi }
         limits: { cpu: 50m, memory: 512Mi }
       admin:
         existingSecret: grafana-secret
@@ -48,23 +48,23 @@ spec:
     prometheus:
       prometheusSpec:
         enableRemoteWriteReceiver: true
-        persistence: { enabled: true, type: pvc, size: 5Gi }
+        persistence: { enabled: true, size: 5Gi, storageClass: standard }
         resources:
-          requests: { cpu: 50m, memory: 256Mi }
+          requests: { cpu: 100m, memory: 512Mi }
           limits: { cpu: 100m, memory: 512Mi }
 
     prometheusOperator:
       resources:
-        requests: { cpu: 20m, memory: 32Mi }
-        limits: { cpu: 40m, memory: 64Mi }
+        requests: { cpu: 25m, memory: 64Mi }
+        limits: { cpu: 25m, memory: 64Mi }
 
     kube-state-metrics:
       resources:
-        requests: { cpu: 10m, memory: 32Mi }
-        limits: { cpu: 20m, memory: 64Mi }
+        requests: { cpu: 25m, memory: 64Mi }
+        limits: { cpu: 25m, memory: 64Mi }
 
     prometheus-node-exporter:
       resources:
-        requests: { cpu: 10m, memory: 32Mi }
-        limits: { cpu: 20m, memory: 64Mi }
+        requests: { cpu: 25m, memory: 64Mi }
+        limits: { cpu: 25m, memory: 64Mi }
     
