@@ -45,7 +45,7 @@ metadata:
     app.kubernetes.io/name: cart-service
 spec:
   serviceName: cart-service-headless
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/instance: cart-service
