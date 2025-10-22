@@ -37,5 +37,5 @@ spec:
       replicaCount: 3
       persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
-        requests: { cpu: 50m, memory: 256Mi }
+        requests: { cpu: 100m, memory: 640Mi }
         limits: { cpu: 100m, memory: 640Mi }
