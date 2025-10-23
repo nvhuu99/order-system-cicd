@@ -17,13 +17,13 @@ spec:
       
       schemaConfig:
         configs:
-        - from: 2020-05-15
-          store: tsdb
-          object_store: s3
-          schema: v13
-          index:
-            prefix: loki_index_
-            period: 24h
+          - from: 2020-05-15
+            store: tsdb
+            object_store: s3
+            schema: v13
+            index:
+              prefix: loki_index_
+              period: 24h
 
       storage_config:
         tsdb_shipper:
@@ -33,11 +33,15 @@ spec:
           s3: s3://ap-southeast-7/order-system-monitoring-loki
 
     ingester:
-      persistence: { enabled: true, size: 5Gi, storageClass: gp2 }
+      persistence:
+        enabled: true
+        claims: { size: 5Gi, storageClass: gp2 }
 
     querier:
       persistence: { enabled: true, size: 3Gi, storageClass: gp2 }
 
     compactor:
-      persistence: { enabled: true, size: 3Gi, storageClass: gp2 }
+      persistence:
+        enabled: true
+        claims: { size: 3Gi, storageClass: gp2 }
 
