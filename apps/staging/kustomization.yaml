@@ -1,5 +1,9 @@
 resources:
-  - "../base"
+  - "../base/namespace.yaml"
+  - "../base/configmap.yaml"
+  - "../base/inventory-service"
+  - "../base/cart-service"
+  - "../base/shop-service"
 
 patchesStrategicMerge:
   - "./cart-service/cart-service-patch.yaml"

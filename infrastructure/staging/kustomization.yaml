@@ -1,5 +1,9 @@
 resources:
-  - "../base"
+  - "../base/namespaces.yaml"
+  - "../base/repos.yaml"
+  - "../base/redis"
+  - "../base/kafka"
+
 
 patchesStrategicMerge:
   - "./kafka/release-patch.yaml"
