@@ -3,10 +3,10 @@ resources:
   - "../base/repos.yaml"
   - "../base/loki"
   - "../base/tempo"
-  # - "../base/prometheus-grafana"
+  - "../base/prometheus-grafana"
 
 patchesStrategicMerge:
   - "./loki/release-patch.yaml"
   - "./tempo/release-patch.yaml"
-  # - "./prometheus-grafana/release-patch.yaml"
+  - "./prometheus-grafana/release-patch.yaml"
   # - "./ingress.yaml"
