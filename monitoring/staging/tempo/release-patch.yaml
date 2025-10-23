@@ -15,6 +15,7 @@ spec:
         s3:
           region: ap-southeast-7
           bucket: order-system-monitoring-tempo
+          endpoint: s3.ap-southeast-7.amazonaws.com
 
     ingester:
       persistence: { enabled: true, size: 5Gi, storageClass: gp2 }
