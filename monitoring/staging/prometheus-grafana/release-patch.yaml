@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: prom-stack
+  namespace: monitoring
+spec:
+  values:
+
+    grafana:
+      persistence: { enabled: true, size: 3Gi, storageClass: gp2 }
+
+    prometheus:
+      prometheusSpec:
+        persistence: { enabled: true, size: 5Gi, storageClass: gp2 }
+    
