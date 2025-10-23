@@ -5,3 +5,4 @@ patchesStrategicMerge:
   - "./loki/release-patch.yaml"
   - "./tempo/release-patch.yaml"
   - "./prometheus-grafana/release-patch.yaml"
+  - "./ingress.yaml"
