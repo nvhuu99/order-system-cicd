@@ -9,12 +9,6 @@ spec:
       create: true
       name: tempo
 
-    tempo:
-      image:
-        registry: docker.io
-        repository: grafana/tempo
-        tag: 2.9.0
-      
     storage:
       trace:
         backend: s3
@@ -22,11 +16,6 @@ spec:
           region: ap-southeast-7
           bucket: order-system-monitoring-tempo
 
-    distributor:
-      persistence: { enabled: true, size: 3Gi, storageClass: gp2 }
-
     ingester:
       persistence: { enabled: true, size: 5Gi, storageClass: gp2 }
 
-    compactor:
-      persistence: { enabled: true, size: 3Gi, storageClass: gp2 }
