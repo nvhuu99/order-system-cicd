@@ -22,7 +22,10 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        claims: { size: 5Gi, storageClass: gp2 }
+        claims:
+        - name: data
+          size: 5Gi
+          storageClass: standard
       resources:
         requests: { cpu: 50m, memory: 256Mi }
         limits: { cpu: 50m, memory: 256Mi }
@@ -56,7 +59,10 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        claims: { size: 3Gi, storageClass: gp2 }
+        claims:
+        - name: data
+          size: 3Gi
+          storageClass: standard
       resources:
         requests: { cpu: 25m, memory: 64Mi }
         limits: { cpu: 25m, memory: 64Mi }

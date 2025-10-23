@@ -35,7 +35,10 @@ spec:
     ingester:
       persistence:
         enabled: true
-        claims: { size: 5Gi, storageClass: gp2 }
+        claims:
+        - name: data
+          size: 5Gi
+          storageClass: gp2
 
     querier:
       persistence: { enabled: true, size: 3Gi, storageClass: gp2 }
@@ -43,5 +46,8 @@ spec:
     compactor:
       persistence:
         enabled: true
-        claims: { size: 3Gi, storageClass: gp2 }
+        claims:
+        - name: data
+          size: 3Gi
+          storageClass: gp2
 
