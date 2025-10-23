@@ -22,15 +22,22 @@ spec:
       enabled: false
 
     grafana:
-      persistence: { enabled: true, size: 3Gi, storageClass: standard }
       initChownData: { enabled: false }
-      resources:
-        requests: { cpu: 50m, memory: 512Mi }
-        limits: { cpu: 50m, memory: 512Mi }
       admin:
         existingSecret: grafana-secret
         userKey: admin-user
         passwordKey: admin-password
+      resources:
+        requests: { cpu: 50m, memory: 512Mi }
+        limits: { cpu: 50m, memory: 512Mi }
+      persistence:
+        enabled: true
+        type: sts
+        storageClassName: standard
+        accessModes: ["ReadWriteOnce"]
+        size: 3Gi
+        finalizers:
+          - kubernetes.io/pvc-protection
 
       additionalDataSources:
         - name: Loki
@@ -48,10 +55,18 @@ spec:
     prometheus:
       prometheusSpec:
         enableRemoteWriteReceiver: true
-        persistence: { enabled: true, size: 5Gi, storageClass: standard }
         resources:
           requests: { cpu: 100m, memory: 512Mi }
           limits: { cpu: 100m, memory: 512Mi }
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: gp2
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 5Gi
+              selector: {}
 
     prometheusOperator:
       resources:

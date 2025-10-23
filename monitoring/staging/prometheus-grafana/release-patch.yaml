@@ -7,9 +7,24 @@ spec:
   values:
 
     grafana:
-      persistence: { enabled: true, size: 3Gi, storageClass: gp2 }
+      persistence:
+        enabled: true
+        type: sts
+        storageClassName: gp2
+        accessModes: ["ReadWriteOnce"]
+        size: 3Gi
+        finalizers:
+          - kubernetes.io/pvc-protection
 
     prometheus:
       prometheusSpec:
-        persistence: { enabled: true, size: 5Gi, storageClass: gp2 }
-    
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: gp2
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 5Gi
+              selector: {}
+          
