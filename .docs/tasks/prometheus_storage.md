@@ -26,5 +26,3 @@
 2. Data retention: policy how to keep the data before delete them (size, or time)
 
 3. Decide the disk size: `retention_time_seconds * ingested_samples_per_second * bytes_per_sample`. The intested samples per second is based on the scrape interval, and the number of timeseries.
-
-4. Choose the storage type: the data are store in segment files, all data belong to a series stored together, there are index files and metadata files ... All of these properties show that Prometheus can read/write data without too many random accesses. Therefore, an Object Storage such as AWS S3 is well fit in this case, as its optimized for high throughput. 
