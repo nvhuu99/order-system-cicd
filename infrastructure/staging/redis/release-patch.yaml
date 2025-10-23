@@ -7,5 +7,4 @@ spec:
   values:
     controller:
       resources:
-        requests: { cpu: 100m, memory: 256Mi }
-        limits: { cpu: 100m, memory: 256Mi }
+        persistence: { enabled: true, size: 1Gi, storageClass: gp2 }

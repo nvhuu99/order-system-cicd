@@ -6,6 +6,4 @@ metadata:
 spec:
   values:
     controller:
-      resources:
-        requests: { cpu: 100m, memory: 640Mi }
-        limits: { cpu: 100m, memory: 640Mi }
+      persistence: { enabled: true, size: 5Gi, storageClass: gp2 }
