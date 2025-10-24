@@ -1,12 +1,12 @@
 resources:
   - "../base/namespace.yaml"
   - "../base/repos.yaml"
-  # - "../base/loki"
-  # - "../base/tempo"
+  - "../base/loki"
+  - "../base/tempo"
   - "../base/prometheus-grafana"
+  - "./ingress.yaml"
 
 patchesStrategicMerge:
-  # - "./loki/release-patch.yaml"
-  # - "./tempo/release-patch.yaml"
+  - "./loki/release-patch.yaml"
+  - "./tempo/release-patch.yaml"
   - "./prometheus-grafana/release-patch.yaml"
-  # - "./ingress.yaml"
