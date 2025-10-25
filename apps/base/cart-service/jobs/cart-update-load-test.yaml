@@ -26,6 +26,12 @@ spec:
               value: "100"
             - name: MAX_DURATION
               value: "60s"
+            - name: "CART_SVC_INSTANCES"
+              value: |- 
+                cart-service-0.cart-service-headless.apps.svc.cluster.local,
+                cart-service-1.cart-service-headless.apps.svc.cluster.local,
+                cart-service-3.cart-service-headless.apps.svc.cluster.local
+                cart-service-4.cart-service-headless.apps.svc.cluster.local
           volumeMounts:
             - name: k6-script
               mountPath: /scripts

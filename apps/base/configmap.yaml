@@ -33,7 +33,3 @@ data:
   CART_SVC_HOST: "cart-service"
   CART_SVC_API_PORT: "8081"
   CART_SVC_GRPC_PORT: "9091"
-  CART_SVC_INSTANCES: |- 
-    cart-service-0.cart-service-headless.apps.svc.cluster.local,
-    cart-service-1.cart-service-headless.apps.svc.cluster.local,
-    cart-service-2.cart-service-headless.apps.svc.cluster.local
