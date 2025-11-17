@@ -3,3 +3,4 @@ resources:
   - "./repos.yaml"
   - "./redis"
   - "./kafka"
+  - "./mysql"

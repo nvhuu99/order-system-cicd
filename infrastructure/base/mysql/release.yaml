@@ -1,0 +1,46 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mysql
+  namespace: infras
+spec:
+  interval: 1h
+  timeout: 10m
+  releaseName: mysql
+  targetNamespace: infras
+  chart:
+    spec:
+      chart: mysql
+      version: 14.0.3
+      sourceRef:
+        kind: HelmRepository
+        name: bitnamicharts
+        namespace: infras
+  values:
+    image:
+      registry: docker.io
+      repository: bitnamilegacy/mysql
+      tag: 9.4.0-debian-12-r1
+    architecture: replication
+    auth:
+      createDatabase: true
+      database: order_system
+      username: "admin"
+      existingSecret: mysql-secrets
+    primary:
+      persistence: { enabled: true, size: 3Gi, storageClass: standard }
+      resources:
+        requests: { cpu: 100m, memory: 256Mi }
+        limits: { cpu: 100m, memory: 256Mi }
+      extraFlags:
+        - name: TZ
+          value: UTC
+    secondary:
+      replicaCount: 1
+      persistence: { enabled: true, size: 3Gi, storageClass: standard }
+      resources:
+        requests: { cpu: 100m, memory: 256Mi }
+        limits: { cpu: 100m, memory: 256Mi }
+    networkPolicy:
+      enabled: true
+      allowExternal: false
