@@ -38,6 +38,6 @@ spec:
       resources:
         requests: { cpu: 100m, memory: 512Mi }
         limits: { cpu: 100m, memory: 512Mi }
-    networkPolicy:
-      enabled: true
-      allowExternal: false
+    # networkPolicy:
+    #   enabled: true
+    #   allowExternal: false
