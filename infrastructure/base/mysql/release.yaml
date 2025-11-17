@@ -30,8 +30,8 @@ spec:
     primary:
       persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
-        requests: { cpu: 100m, memory: 256Mi }
-        limits: { cpu: 100m, memory: 256Mi }
+        requests: { cpu: 100m, memory: 512Mi }
+        limits: { cpu: 100m, memory: 512Mi }
       extraFlags:
         - name: TZ
           value: UTC
@@ -39,8 +39,8 @@ spec:
       replicaCount: 1
       persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
-        requests: { cpu: 100m, memory: 256Mi }
-        limits: { cpu: 100m, memory: 256Mi }
+        requests: { cpu: 100m, memory: 512Mi }
+        limits: { cpu: 100m, memory: 512Mi }
     networkPolicy:
       enabled: true
       allowExternal: false
