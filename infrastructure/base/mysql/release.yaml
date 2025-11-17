@@ -32,9 +32,9 @@ spec:
       resources:
         requests: { cpu: 100m, memory: 512Mi }
         limits: { cpu: 100m, memory: 512Mi }
-      extraFlags:
-        - name: TZ
-          value: UTC
+      # extraFlags:
+      #   - name: TZ
+      #     value: UTC
     secondary:
       replicaCount: 1
       persistence: { enabled: true, size: 3Gi, storageClass: standard }
