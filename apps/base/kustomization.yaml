@@ -1,6 +1,7 @@
 resources:
   - "./namespace.yaml"
   - "./configmap.yaml"
-  - "./inventory-service"
-  - "./cart-service"
   - "./shop-service"
+  - "./inventory-service"
+  - "./auth-service"
+  - "./api-gateway"

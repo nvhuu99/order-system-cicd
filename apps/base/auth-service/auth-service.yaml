@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: apps
+  labels:
+    app.kubernetes.io/name: auth-service
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/instance: auth-service
+  ports:
+    - port: 8082
+      targetPort: 8082
+      name: api
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: auth-service
+  namespace: apps
+  labels:
+    app.kubernetes.io/name: auth-service
+spec:
+  serviceName: auth-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: auth-service
+  template:
+    metadata:
+      namespace: apps
+      labels:
+        app.kubernetes.io/name: auth-service
+        app.kubernetes.io/instance: auth-service
+    spec:
+      containers:
+      - name: auth-service
+        image: nvhuu991/order-system-auth-service
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 384Mi
+          limits:
+            cpu: 100m
+            memory: 512Mi
+        ports:
+          - containerPort: 8082
+        env:
+          - name: AUTH_SVC_JWT_SECRET
+            valueFrom:
+              secretKeyRef: { name: app-secrets, key: auth-service-jwt-secret }
+        envFrom:
+          - configMapRef:
+              name: apps-env

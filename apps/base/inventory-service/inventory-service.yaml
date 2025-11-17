@@ -10,8 +10,12 @@ spec:
   selector:
     app.kubernetes.io/instance: inventory-service
   ports:
-    - port: 9090
-      targetPort: 9090
+    - port: 8083
+      targetPort: 8083
+      name: api
+    - port: 9093
+      targetPort: 9093
+      name: grpc
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -22,7 +26,7 @@ metadata:
     app.kubernetes.io/name: inventory-service
 spec:
   serviceName: inventory-service
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app.kubernetes.io/instance: inventory-service
@@ -35,7 +39,7 @@ spec:
     spec:
       containers:
       - name: inventory-service
-        image: nvhuu991/order-system:inventory-service
+        image: nvhuu991/order-system-inventory-service
         imagePullPolicy: Always
         resources:
           requests:
@@ -45,7 +49,8 @@ spec:
             cpu: 200m
             memory: 512Mi
         ports:
-          - containerPort: 9090
+          - containerPort: 8083
+          - containerPort: 9093
         envFrom:
           - configMapRef:
               name: apps-env
