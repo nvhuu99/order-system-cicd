@@ -30,14 +30,14 @@ spec:
     primary:
       persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
-        requests: { cpu: 100m, memory: 512Mi }
-        limits: { cpu: 100m, memory: 512Mi }
+        requests: { cpu: 100m, memory: 1024Mi }
+        limits: { cpu: 100m, memory: 1024Mi }
     secondary:
       replicaCount: 1
       persistence: { enabled: true, size: 3Gi, storageClass: standard }
       resources:
-        requests: { cpu: 100m, memory: 512Mi }
-        limits: { cpu: 100m, memory: 512Mi }
+        requests: { cpu: 100m, memory: 1024Mi }
+        limits: { cpu: 100m, memory: 1024Mi }
     # networkPolicy:
     #   enabled: true
     #   allowExternal: false
