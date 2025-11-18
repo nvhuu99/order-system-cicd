@@ -3,4 +3,4 @@ resources:
   - "../base/repos.yaml"
   # - "../base/redis"
   # - "../base/kafka"
-  # - "../base/mysql"
+  - "../base/mysql"
