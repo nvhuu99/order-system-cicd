@@ -1,7 +1,7 @@
 resources:
   - "../base/namespace.yaml"
   - "../base/configmap.yaml"
-  # - "../base/inventory-service"
+  - "../base/inventory-service"
   # - "../base/shop-service"
   # - "../base/auth-service"
   # - "../base/api-gateway"
