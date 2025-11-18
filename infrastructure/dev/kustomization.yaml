@@ -1,6 +1,6 @@
 resources:
   - "../base/namespaces.yaml"
   - "../base/repos.yaml"
-  # - "../base/redis"
-  # - "../base/kafka"
+  - "../base/redis"
+  - "../base/kafka"
   - "../base/mysql"
