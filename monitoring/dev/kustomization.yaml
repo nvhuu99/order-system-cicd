@@ -1,6 +1,6 @@
 resources:
   - "../base/namespace.yaml"
   - "../base/repos.yaml"
-  - "../base/loki"
+  # - "../base/loki"
   # - "../base/tempo"
   # - "../base/prometheus-grafana"

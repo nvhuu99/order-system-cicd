@@ -1,2 +1,4 @@
 resources:
-  - "../base"
+  - "../base/namespace.yaml"
+  - "../base/repos.yaml"
+  # - "../base/jenkins"
