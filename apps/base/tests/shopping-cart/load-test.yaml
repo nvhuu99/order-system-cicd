@@ -9,7 +9,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: k6
-          image: nvhuu991/order-system-user-cart-k6-test
+          image: nvhuu991/order-system-user-cart-k6
           imagePullPolicy: Always
           resources:
             requests: { cpu: "200m", memory: "128Mi" }
