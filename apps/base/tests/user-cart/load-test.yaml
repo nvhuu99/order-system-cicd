@@ -35,9 +35,9 @@ spec:
             - name: SUMMARY_WAIT_FOR_SYNC_SECONDS
               value: "10"
             - name: "INVENTORY_API_ADDR"
-              value: inventory-service.apps.svc.cluster.local
+              value: "http://inventory-service.apps.svc.cluster.local:8083"
             - name: "SHOP_API_ADDR"
-              value: shop-service.apps.svc.cluster.local
+              value: "http://shop-service.apps.svc.cluster.local:8081"
             - name: DURATION
               value: "10h"
             - name: PRUNE
