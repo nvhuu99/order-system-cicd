@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: user-cart-soak-test
+  namespace: apps
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: k6
+          image: nvhuu991/order-system-user-cart-k6-test
+          imagePullPolicy: Always
+          resources:
+            requests: { cpu: "200m", memory: "128Mi" }
+            limits: { cpu: "200m", memory: "128Mi" }
+          envFrom:
+            - configMapRef:
+                name: apps-env
+          env:
+            - name: K6_SCRIPT
+              value: "user-cart/soak-test.js"
+            - name: TOTAL_USERS
+              value: "50"
+            - name: SEED_PRODUCTS_TOTAL
+              value: "10"
+            - name: MAX_PRODUCT_STOCK
+              value: "2500"
+            - name: CART_ITEM_MAX_QTY
+              value: "10"
+            - name: CART_MAX_ITEMS
+              value: "10"
+            - name: SUMMARY_WAIT_FOR_SYNC_SECONDS
+              value: "60"
+            - name: "INVENTORY_API_ADDR"
+              value: inventory-service.apps.svc.cluster.local
+            - name: "SHOP_API_ADDR"
+              value: shop-service.apps.svc.cluster.local
+            - name: DURATION
+              value: "10h"
+            - name: PRUNE
+              value: "false"
+            - name: VERBOSE
+              value: "false"
